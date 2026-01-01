@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Citizen Issue Reporting Portal</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial;
+      background: linear-gradient(
+        135deg,
+        #f3f8ff 0%,
+        #e6eef9 50%,
+        #fdfefe 100%
+      );
+      min-height: 100vh;
+    }
+
+    .header {
+      background: #0b3c6f;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .logo img {
+      height: 70px;
+      margin-bottom: 8px;
+    }
+
+    .container {
+      max-width: 440px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      margin-top: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #0b3c6f;
+      margin-top: 0;
+    }
+
+    p {
+      font-size: 14px;
+      color: #444;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 11px;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    input {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background: #0b5ed7;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #084298;
+    }
+
+    .points {
+      margin-top: 15px;
+      background: #e9f2ff;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      color: #0b3c6f;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+      margin: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <!-- OFFICIAL ASHOKA EMBLEM (PUBLIC SOURCE) -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg">
+  </div>
+  <div>Government of India</div>
+</div>
+
+<div class="container">
+
+  <!-- INTRO PAGE -->
+  <div class="card" id="entryPage">
+    <h2>What is this website?</h2>
+    <p>
+      This official citizen portal allows people to report public
+      infrastructure issues such as potholes, broken traffic lights,
+      and unsafe roads. Citizens are rewarded with points for
+      responsible participation.
+    </p>
+    <button onclick="startApp()">Report a Public Issue</button>
+  </div>
+
+  <!-- REPORT PAGE -->
+  <div class="card hidden" id="reportPage">
+    <h2>Report Public Issue</h2>
+
+    <input id="issue" placeholder="Describe the issue">
+
+    <input type="file" id="photo">
+
+    <button onclick="getLocation()">Capture Location</button>
+
+    <input id="location" placeholder="Location" readonly>
+
+    <button onclick="submitReport()">Submit Report</button>
+
+    <div class="points" id="pointsBox">
+      Total Points: 0
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Citizen Connect • Digital Governance Prototype
+</div>
+
+<script>
+  let points = 0;
+  let locationData = "";
+
+  function startApp() {
+    document.getElementById("entryPage").classList.add("hidden");
+    document.getElementById("reportPage").classList.remove("hidden");
+  }
+
+  function getLocation() {
+    navigator.geolocation.getCurrentPosition(pos => {
+      locationData = pos.coords.latitude + ", " + pos.coords.longitude;
+      document.getElementById("location").value = locationData;
+    });
+  }
+
+  function submitReport() {
+    if (document.getElementById("issue").value === "" || locationData === "") {
+      alert("Issue description aur location required hai");
+      return;
+    }
+
+    points += 10;
+    document.getElementById("pointsBox").innerText =
+      "Total Points: " + points;
+
+    document.getElementById("issue").value = "";
+    document.getElementById("photo").value = "";
+    document.getElementById("location").value = "";
+    locationData = "";
+
+    alert("Report submitted successfully. You earned 10 points.");
+  }
+</script>
+
+</body>
+</html>
